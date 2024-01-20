@@ -1,4 +1,3 @@
-pip install yfinance
 import yfinance
 import datetime
 import pandas as pd
