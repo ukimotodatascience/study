@@ -106,6 +106,7 @@ for i in cor['証券コード']:
     period = "2d"
 
     ticker = yfinance.Ticker(symbol)
+    st.write(ticker)
     df_data = ticker.history(period=period)
     ind = cor[cor['証券コード'] == i].index
     df.iloc[:,int(ind.values)] = df_data['Close']
