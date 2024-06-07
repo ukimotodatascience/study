@@ -9,15 +9,6 @@ import time
 import threading
 
 def job():
-    SP_CREDENTIAL_FILE = './carituku-9c50c815e417.json'
-    # SP_CREDENTIAL_FILE = 'H:\マイドライブ\キャリツク\マッチングアプリ\carituku-9c50c815e417.json'
-    SP_COPE = [
-        'https://www.googleapis.com/auth/drive',
-        'https://spreadsheets.google.com/feeds'
-    ]
-    SP_SHEET_KEY = '1vRWoxiVFGvbF_tKhA4-OGnALhxK1o3CQ8Zdnw7yu_u0'
-    SP_SHEET = 'フォームの回答 1'
-
     credentials = ServiceAccountCredentials.from_json_keyfile_name(SP_CREDENTIAL_FILE, SP_COPE)
     gc = gspread.authorize(credentials)
     sh = gc.open_by_key(SP_SHEET_KEY)
