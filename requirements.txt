@@ -3,9 +3,3 @@ streamlit
 pandas
 datetime
 numpy
-gspread
-json
-schedule
-time
-threading
-ServiceAccountCredentials
