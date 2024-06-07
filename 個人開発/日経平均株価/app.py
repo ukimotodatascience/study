@@ -116,8 +116,10 @@ for index, row in df_change.iterrows():
     if index in cor['企業名'].values:
         corresponding_industry = cor.loc[cor['企業名'] == index, '産業'].values[0]
         df_change.at[index, '産業'] = corresponding_industry
-    df_change.at[index, '変化額'] = df[index].iloc[-2:,].values[1] - df[index].iloc[-2:,].values[0]
-    df_change.at[index, '変化率'] = df[index].iloc[-2:,].values[1] / df[index].iloc[-2:,].values[0]
+    if len(df[index]) >= 2:
+        df_change.at[index, '変化額'] = df[index].iloc[-2:].values[1] - df[index].iloc[-2:].values[0]
+    else:
+        df_change.at[index, '変化額'] = None  # データが足りない場合の処理（例: Noneを設定）
 
 df_change = df_change.sort_values(by='変化額', ascending=False)
 
