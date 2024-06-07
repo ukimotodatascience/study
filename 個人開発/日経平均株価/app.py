@@ -99,6 +99,7 @@ data = {
 cor = pd.DataFrame(data)
 
 df = pd.DataFrame(columns=cor['企業名'])
+st.dataframe(df)
 
 for i in cor['証券コード']:
     symbol = str(i)+'.T'
