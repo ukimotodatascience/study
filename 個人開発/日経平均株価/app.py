@@ -109,7 +109,8 @@ for i in cor['証券コード']:
     df_data = Ticker.history(period=period)
     ind = cor[cor['証券コード'] == i].index
     df.iloc[:,int(ind.values)] = df_data['Close']
-    
+
+st.dataframe(df_data)
 df_change = pd.DataFrame(index=cor['企業名'], columns=['産業','変化額','変化率'])
 
 for index, row in df_change.iterrows():
