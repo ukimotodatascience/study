@@ -14,7 +14,6 @@ def job():
     sh = gc.open_by_key(SP_SHEET_KEY)
     worksheet = sh.worksheet(SP_SHEET)
     df = worksheet.get_all_values()
-    df.to_csv('/テスト/data.csv')
 
 # スケジュールを設定
 schedule.every().day.at("09:00").do(job)
@@ -25,7 +24,6 @@ def schedule_job():
         schedule.run_pending()
         time.sleep(1)
 
-df = pd.read_csv('./テスト/data.csv')
 df = df.drop('Unnamed: 0', axis=1)
 
 st.title('キャリツクマッチング')
