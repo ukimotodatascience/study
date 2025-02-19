@@ -52,7 +52,7 @@ top_addresses = top_addresses.sort_values(by="total_value", ascending=False)
 
 
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # 日ごとの取引数を集計
 df['date'] = df['timeStamp'].dt.date
