@@ -8,6 +8,7 @@ import os
 
 # 環境変数の取得
 # API_KEY = os.getenv("ETHERSCAN_API_KEY")
+API_KEY = os.environ.get("API_KEY")
 TOKEN_CONTRACT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"  # USDTのコントラクトアドレス
 
 
