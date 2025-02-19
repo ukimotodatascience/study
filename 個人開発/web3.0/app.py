@@ -3,11 +3,11 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 
-# .env ファイルの読み込み
-load_dotenv()
+.env ファイルの読み込み
+# load_dotenv()
 
 # 環境変数の取得
-API_KEY = os.getenv("ETHERSCAN_API_KEY")
+# API_KEY = os.getenv("ETHERSCAN_API_KEY")
 TOKEN_CONTRACT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"  # USDTのコントラクトアドレス
 
 
