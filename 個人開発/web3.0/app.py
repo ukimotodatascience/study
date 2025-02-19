@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 
-.env ファイルの読み込み
+# .env ファイルの読み込み
 # load_dotenv()
 
 # 環境変数の取得
