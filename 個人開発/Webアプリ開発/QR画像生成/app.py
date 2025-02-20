@@ -49,14 +49,13 @@ def main():
             st.subheader("📏 画像の背景透過処理")
             transparent_img = make_transparent(overlay_image)
             
-            # QR画像のサイズに切り抜く
-            overlay_cropped = transparent_img.resize(qr_image.size, Image.ANTIALIAS)
+            # QR画像のサイズを取得
+            qr_width, qr_height = qr_image.size
             
-            # 画像のサイズをQRコード画像に合わせる
-            width, height = qr_image.size
-            overlay_resized = overlay_cropped.resize((width // 3, height // 3), Image.ANTIALIAS)
-            
-            # QRコード画像の中心に配置
+            # 重ねる画像のサイズをQR画像のサイズに合わせる
+            overlay_resized = transparent_img.resize((qr_width, qr_height), Image.ANTIALIAS)
+                                    
+            # QRコード画像の左上に配置
             pos_x = 0
             pos_y = 0
             combined_image = overlay_images(qr_image, overlay_resized, (pos_x, pos_y))
