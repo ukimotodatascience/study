@@ -57,8 +57,8 @@ def main():
             overlay_resized = overlay_cropped.resize((width // 3, height // 3), Image.ANTIALIAS)
             
             # QRコード画像の中心に配置
-            pos_x = (width - overlay_resized.width) // 2
-            pos_y = (height - overlay_resized.height) // 2
+            pos_x = 0
+            pos_y = 0
             combined_image = overlay_images(qr_image, overlay_resized, (pos_x, pos_y))
             
             # 出力画像を表示
