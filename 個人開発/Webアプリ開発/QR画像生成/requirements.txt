@@ -4,6 +4,3 @@ pillow<10
 numpy<2
 rembg
 onnxruntime
-zlib
-libjpeg
-libpng
