@@ -1,13 +1,17 @@
 import streamlit as st
+from streamlit_cropper import st_cropper
 from PIL import Image, ImageOps
 import io
 import numpy as np
-from rembg import remove
 
 def make_transparent(image):
     """ Convert white background to transparent """
-    image = remove(image)
-    return image
+    image = image.convert("RGBA")
+    data = np.array(image)
+    red, green, blue, alpha = data.T
+    white_areas = (red > 200) & (green > 200) & (blue > 200)
+    data[..., 3][white_areas] = 0
+    return Image.fromarray(data)
 
 def overlay_images(qr_img, overlay_img, position):
     """ Overlay an image on top of a QR code at a given position """
@@ -35,13 +39,16 @@ def main():
         qr_image = Image.open(uploaded_qr).convert("RGBA")
         overlay_image = Image.open(uploaded_img).convert("RGBA")
         
+        # 画像クロップ処理
+        st.subheader("📏 画像のトリミング")
+        cropped_img = st_cropper(overlay_image, realtime_update=True, box_color="#FF0000")
+        
         # 透過処理
-        st.subheader("📏 画像の背景透過処理")
-        transparent_img = make_transparent(overlay_image)
+        transparent_img = make_transparent(cropped_img)
         
         # 画像のサイズをQRコード画像に合わせる
         width, height = qr_image.size
-        overlay_resized = transparent_img.resize((width // 3, height // 3), Image.LANCZOS)
+        overlay_resized = transparent_img.resize((width // 3, height // 3), Image.ANTIALIAS)
         
         # QRコード画像の中心に配置
         pos_x = (width - overlay_resized.width) // 2
