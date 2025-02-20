@@ -45,21 +45,14 @@ def main():
             st.subheader("📏 画像の背景透過処理")
             transparent_img = make_transparent(overlay_image)
             
-            # ユーザーが切り抜く位置を指定
-            st.subheader("✂️ 切り抜く位置を指定")
-            left = st.slider("左", 0, qr_image.width, 0)
-            top = st.slider("上", 0, qr_image.height, 0)
-            right = st.slider("右", 0, qr_image.width, qr_image.width)
-            bottom = st.slider("下", 0, qr_image.height, qr_image.height)
-            
-            # 切り抜き処理
-            overlay_cropped = transparent_img.crop((left, top, right, bottom))
+            # QR画像のサイズに切り抜く
+            overlay_cropped = transparent_img.resize(qr_image.size, Image.ANTIALIAS)
             
             # 画像のサイズをQRコード画像に合わせる
-            overlay_resized = overlay_cropped.resize((qr_image.width // 3, qr_image.height // 3), Image.ANTIALIAS)
+            width, height = qr_image.size
+            overlay_resized = overlay_cropped.resize((width // 3, height // 3), Image.ANTIALIAS)
             
             # QRコード画像の中心に配置
-            width, height = qr_image.size
             pos_x = (width - overlay_resized.width) // 2
             pos_y = (height - overlay_resized.height) // 2
             combined_image = overlay_images(qr_image, overlay_resized, (pos_x, pos_y))
