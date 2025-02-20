@@ -27,9 +27,23 @@ def overlay_images(qr_img, overlay_img, position):
 def get_image_download_link(img, format):
     """ Convert image to byte stream for download """
     img_byte_arr = io.BytesIO()
+    
+    # 画像形式に応じて処理を分ける
+    if format == "JPEG":
+        img = img.convert("RGB")  # JPEG用にRGBに変換
+    elif format == "PNG":
+        img = img.convert("RGBA")  # PNG用にRGBAを維持
+    
     img.save(img_byte_arr, format=format)
     img_byte_arr.seek(0)
     return img_byte_arr
+
+# def get_image_download_link(img, format):
+#     """ Convert image to byte stream for download """
+#     img_byte_arr = io.BytesIO()
+#     img.save(img_byte_arr, format=format)
+#     img_byte_arr.seek(0)
+#     return img_byte_arr
 
 def main():
     st.set_page_config(page_title="QR Image Combiner", layout="centered")
@@ -68,9 +82,11 @@ def main():
             st.subheader("💾 ダウンロード")
             col1, col2 = st.columns(2)
             with col1:
-                st.download_button("Download as PNG", get_image_download_link(combined_image, "PNG"), "qr_image.png", "image/png")
+                if st.button("Download as PNG"):
+                    st.download_button("Download as PNG", get_image_download_link(combined_image, "PNG"), "qr_image.png", "image/png")
             with col2:
-                st.download_button("Download as JPG", get_image_download_link(combined_image, "JPEG"), "qr_image.jpg", "image/jpeg")
+                if st.button("Download as JPG"):
+                    st.download_button("Download as JPG", get_image_download_link(combined_image, "JPEG"), "qr_image.jpg", "image/jpeg")
         else:
             st.warning("QRコード画像と重ねる画像の両方をアップロードしてください。")
 
