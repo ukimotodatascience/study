@@ -77,3 +77,6 @@ def main():
                 st.download_button("Download as JPG", get_image_download_link(combined_image, "JPEG"), "qr_image.jpg", "image/jpeg")
         else:
             st.warning("QRコード画像と重ねる画像の両方をアップロードしてください。")
+
+if __name__ == "__main__":
+    main()
