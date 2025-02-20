@@ -16,7 +16,11 @@ def overlay_images(qr_img, overlay_img, position):
     overlay_img = overlay_img.convert("RGBA")
     
     # 透明度を設定
-    overlay_img = overlay_img.putalpha(int(255 * 0.65))  # 65%の透明度
+    overlay_img.putalpha(int(255 * 0.65))  # 65%の透明度
+    # 位置がQRコードの範囲内にあることを確認
+    if position[0] < 0 or position[1] < 0 or position[0] + overlay_img.width > qr_img.width or position[1] + overlay_img.height > qr_img.height:
+        raise ValueError("Overlay position is out of bounds.")
+    
     qr_img.paste(overlay_img, position, overlay_img)
     return qr_img
 
