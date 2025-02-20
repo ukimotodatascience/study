@@ -2,7 +2,6 @@ import streamlit as st
 from PIL import Image, ImageOps
 import io
 import numpy as np
-import cv2
 from rembg import remove
 
 def make_transparent(image):
@@ -42,7 +41,7 @@ def main():
         
         # 画像のサイズをQRコード画像に合わせる
         width, height = qr_image.size
-        overlay_resized = transparent_img.resize((width // 3, height // 3), Image.ANTIALIAS)
+        overlay_resized = transparent_img.resize((width // 3, height // 3), Image.LANCZOS)
         
         # QRコード画像の中心に配置
         pos_x = (width - overlay_resized.width) // 2
