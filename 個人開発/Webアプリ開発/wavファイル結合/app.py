@@ -41,14 +41,24 @@ if uploaded_files:
         file_data_list = [{"label": f.name, "file": f} for f in uploaded_files]
         sorted_file_data = [next(item for item in file_data_list if item["label"] == name) for name in selected_order]
 
-        try:
-            output_buffer = combine_wav_files_pydub(sorted_file_data)
-            st.success("結合が完了しました！")
-            st.audio(output_buffer, format='audio/wav')
-            st.download_button("ダウンロード", output_buffer, file_name="combined.wav", mime="audio/wav")
+        if st.button("🔗 結合する"):
+            try:
+                output_buffer = combine_wav_files_pydub(sorted_file_data)
+                st.success("結合が完了しました！")
+                st.audio(output_buffer, format='audio/wav')
+                st.download_button("ダウンロード", output_buffer, file_name="combined.wav", mime="audio/wav")
 
-        except Exception as e:
-            st.error(f"エラーが発生しました: {str(e)}")
+            except Exception as e:
+                st.error(f"エラーが発生しました: {str(e)}")
+
+        # try:
+        #     output_buffer = combine_wav_files_pydub(sorted_file_data)
+        #     st.success("結合が完了しました！")
+        #     st.audio(output_buffer, format='audio/wav')
+        #     st.download_button("ダウンロード", output_buffer, file_name="combined.wav", mime="audio/wav")
+
+        # except Exception as e:
+        #     st.error(f"エラーが発生しました: {str(e)}")
     else:
         st.warning("すべてのファイルを順番に選択してください。")
 
