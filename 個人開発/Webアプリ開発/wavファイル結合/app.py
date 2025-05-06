@@ -28,8 +28,8 @@ uploaded_file = st.file_uploader("WAVファイルをアップロードしてく�
 
 if uploaded_file is not None:
     # 開始・終了トークのパス
-    opening_path = "オープニングトーク.wav"
-    closing_path = "クロージングトーク.wav"
+    opening_path = "opening.wav"
+    closing_path = "closing.wav"
 
     with NamedTemporaryFile(delete=False, suffix=".wav") as tmp_input:
         tmp_input.write(uploaded_file.read())
