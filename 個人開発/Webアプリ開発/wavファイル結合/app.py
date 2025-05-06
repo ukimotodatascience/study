@@ -1,7 +1,6 @@
 import streamlit as st
 from pydub import AudioSegment
 from io import BytesIO
-import streamlit_sortables as sortables
 
 def combine_wav_files_pydub(file_data_list, target_format="wav"):
     combined = AudioSegment.empty()
@@ -17,37 +16,41 @@ def combine_wav_files_pydub(file_data_list, target_format="wav"):
     buffer.seek(0)
     return buffer
 
-# Streamlit UI
-st.title("WAVファイル一括結合アプリ（並び替え対応）")
-st.write("WAVファイルをアップロードし、結合順をドラッグで並び替えてください。")
+st.title("WAVファイル一括結合アプリ（順序指定付き）")
 
-uploaded_files = st.file_uploader("WAVファイルをアップロード（複数選択可）", type=["wav"], accept_multiple_files=True)
+uploaded_files = st.file_uploader(
+    "WAVファイルをアップロード（複数選択可）", type=["wav"], accept_multiple_files=True
+)
 
 if uploaded_files:
-    # ファイル情報のリストを作成
-    file_data_list = [{"label": file.name, "file": file} for file in uploaded_files]
+    # 初期ファイル順を記録
+    st.write("アップロードされたファイル：")
+    filenames = [file.name for file in uploaded_files]
+    for i, name in enumerate(filenames):
+        st.write(f"{i+1}. {name}")
 
-    # 並び替えUI
-    sorted_items = sortables.sort_items(
-        [item["label"] for item in file_data_list],
-        direction="vertical",
-        label="ドラッグで順序を変更できます：",
+    # 並び順を決める
+    st.write("ファイルを結合する順番を指定してください：")
+    selected_order = st.multiselect(
+        "順番にファイルを選択してください（すべて選んでください）",
+        options=filenames,
+        default=filenames,
     )
 
-    # 並び替えられた順でファイルデータを再構成
-    sorted_file_data = [next(item for item in file_data_list if item["label"] == label) for label in sorted_items]
+    if len(selected_order) == len(filenames):
+        file_data_list = [{"label": f.name, "file": f} for f in uploaded_files]
+        sorted_file_data = [next(item for item in file_data_list if item["label"] == name) for name in selected_order]
 
-    # 結合処理
-    try:
-        output_buffer = combine_wav_files_pydub(sorted_file_data)
-        st.success("結合が完了しました！")
-        st.audio(output_buffer, format='audio/wav')
-        st.download_button("ダウンロード", output_buffer, file_name="combined.wav", mime="audio/wav")
+        try:
+            output_buffer = combine_wav_files_pydub(sorted_file_data)
+            st.success("結合が完了しました！")
+            st.audio(output_buffer, format='audio/wav')
+            st.download_button("ダウンロード", output_buffer, file_name="combined.wav", mime="audio/wav")
 
-    except Exception as e:
-        st.error(f"エラーが発生しました: {str(e)}")
-
-
+        except Exception as e:
+            st.error(f"エラーが発生しました: {str(e)}")
+    else:
+        st.warning("すべてのファイルを順番に選択してください。")
 
 # import streamlit as st
 # from pydub import AudioSegment
