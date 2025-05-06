@@ -1,7 +1,7 @@
 import streamlit as st
 import wave
 import os
-# from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile
 
 def combine_wav_files(opening_path, user_path, closing_path, output_path):
     # opening, user, closing の順で結合
