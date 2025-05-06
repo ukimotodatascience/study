@@ -3,9 +3,11 @@ import wave
 import os
 from tempfile import NamedTemporaryFile
 
-def combine_wav_files(opening_path, user_path, closing_path, output_path):
-    # opening, user, closing の順で結合
-    with wave.open(opening_path, 'rb') as wf:
+def combine_multiple_wavs(file_paths, output_path):
+    if not file_paths:
+        raise ValueError("結合するファイルがありません。")
+
+    with wave.open(file_paths[0], 'rb') as wf:
         params = wf.getparams()
         frames = wf.readframes(wf.getnframes())
 
@@ -13,32 +15,32 @@ def combine_wav_files(opening_path, user_path, closing_path, output_path):
         output.setparams(params)
         output.writeframes(frames)
 
-        for path in [user_path, closing_path]:
+        for path in file_paths[1:]:
             with wave.open(path, 'rb') as wf:
                 if wf.getparams() != params:
-                    raise ValueError(f"{path} のフォーマットが一致しません。")
+                    raise ValueError(f"{os.path.basename(path)} のフォーマットが一致しません。")
                 frames = wf.readframes(wf.getnframes())
                 output.writeframes(frames)
 
 # Streamlit UI
-st.title("WAVファイル結合アプリ")
-st.write("オープニングトークとクロージングトークの間に、あなたの音声を挿入します。")
+st.title("WAVファイル一括結合アプリ")
+st.write("複数のWAVファイルをアップロードすると、順番に結合されます。")
 
-uploaded_file = st.file_uploader("WAVファイルをアップロードしてください", type=["wav"])
+uploaded_files = st.file_uploader("WAVファイルをアップロード（複数選択可）", type=["wav"], accept_multiple_files=True)
 
-if uploaded_file is not None:
-    # 開始・終了トークのパス
-    opening_path = "opening.wav"
-    closing_path = "closing.wav"
-
-    with NamedTemporaryFile(delete=False, suffix=".wav") as tmp_input:
-        tmp_input.write(uploaded_file.read())
-        tmp_input_path = tmp_input.name
-
-    output_path = "output.wav"
+if uploaded_files:
+    tmp_paths = []
 
     try:
-        combine_wav_files(opening_path, tmp_input_path, closing_path, output_path)
+        # 各ファイルを一時ファイルに保存
+        for file in uploaded_files:
+            with NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
+                tmp.write(file.read())
+                tmp_paths.append(tmp.name)
+
+        output_path = "output.wav"
+        combine_multiple_wavs(tmp_paths, output_path)
+
         st.success("結合が完了しました！")
 
         with open(output_path, 'rb') as audio_file:
@@ -49,4 +51,6 @@ if uploaded_file is not None:
         st.error(str(e))
 
     finally:
-        os.remove(tmp_input_path)
+        # 一時ファイルを削除
+        for path in tmp_paths:
+            os.remove(path)
